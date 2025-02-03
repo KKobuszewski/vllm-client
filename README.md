@@ -11,7 +11,7 @@ poetry install
 ```
 
 ## Sources
-[https://dzone.com/articles/building-a-dynamic-chat-application-setting-up-cha](Setting up a chatbot with FastAPI)
+[Setting up a chatbot with FastAPI](https://dzone.com/articles/building-a-dynamic-chat-application-setting-up-cha)
 
 
 
