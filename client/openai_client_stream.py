@@ -6,7 +6,7 @@ from openai import OpenAI
 
 # Modify OpenAI's API key and API base to use vLLM's API server.
 openai_api_key = "EMPTY"
-openai_api_base = "http://localhost:8000/v1"
+openai_api_base = "http://10.0.1.3:8000/v1"
 
 client = OpenAI(
     api_key=openai_api_key,      # defaults to os.environ.get("OPENAI_API_KEY")
@@ -14,13 +14,16 @@ client = OpenAI(
 )
 
 models = client.models.list()
+print(models)
 model = models.data[0].id
+
+print('model:', model)
 
 # Completion API
 stream = False
 completion = client.completions.create(
     model=model,
-    prompt="A robot may not injure a human being",
+    prompt="Tienanmen masacre",
     echo=False,
     n=2,
     stream=stream,
@@ -30,27 +33,9 @@ print("Completion results:")
 if stream:
     for c in completion:
         print(c)
+        print(c.choices[0].text)
 else:
     print(completion)
+    print(completion.choices[0].text)
 
-import asyncio
-from openai import AsyncOpenAI
-
-client = AsyncOpenAI((
-    api_key=openai_api_key,      # defaults to os.environ.get("OPENAI_API_KEY")
-    base_url=openai_api_base,
-)
-
-
-async def main():
-    stream = await client.chat.completions.create(
-        model="gpt-4",
-        messages=[{"role": "user", "content": "Say this is a test"}],
-        stream=True,
-    )
-    async for chunk in stream:
-        print(chunk.choices[0].delta.content or "", end="")
-
-
-asyncio.run(main())
 
