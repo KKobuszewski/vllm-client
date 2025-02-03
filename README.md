@@ -10,6 +10,10 @@ Client can be run locally with poetry.
 poetry install
 ```
 
+## Sources
+[Setting up a chatbot with FastAPI](https://dzone.com/articles/building-a-dynamic-chat-application-setting-up-cha)
+
+
 
 
 ## Available endpoints
