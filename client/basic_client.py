@@ -39,8 +39,8 @@ def post_http_request(prompt: str,
         "n": n,
         "use_beam_search": False,
         "temperature": temperature,
-        "max_tokens": 16,
-        "max_completion_tokens": 16,
+        "max_tokens": 8192,
+        "max_completion_tokens": 8192,
         "stream": stream,
     }
     if n > 1:
