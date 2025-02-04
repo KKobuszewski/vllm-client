@@ -49,7 +49,7 @@ clientside_callback(
 
 app.layout = dmc.MantineProvider(
     html.Div([
-    dashboard.bars.navbar,
+        dashboard.bars.navbar,
         html.Div([
                 #dashboard.bars.sidebar,
                 #dash.page_container
