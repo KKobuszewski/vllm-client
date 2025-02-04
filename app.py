@@ -47,38 +47,44 @@ clientside_callback(
 )
 
 
-app.layout = dmc.MantineProvider(html.Div([
-    dashboard.bars.navbar,
+app.layout = dmc.MantineProvider(
     html.Div([
-            #dashboard.bars.sidebar,
-            #dash.page_container
-            #dashboard.chatbox.chatbox
-            dmc.Select(
-                id="model-select",
-                data=["DeepSeek"], # <---------- TODO: here put models
-                value="DeepSeek",
-                style={"width": 200},
-                searchable=True,
-                #icon=DashIconify(icon="radix-icons:magnifying-glass"),
-                rightSection=DashIconify(icon="radix-icons:chevron-down"),
-            ),
-            dashboard.chatbox.chat_history,
-            dmc.Textarea(
-                id="input-textarea",
-                placeholder="Enter your prompt here.",
-                autosize=False,
-                radius='md',
-                minRows=2,
-                maxRows=2,
-            ),
-            dmc.Button("Submit prompt to LLM", id="loading-button"),
-        ],
-        className="content",
-    ),
-]))
+    dashboard.bars.navbar,
+        html.Div([
+                #dashboard.bars.sidebar,
+                #dash.page_container
+                #dashboard.chatbox.chatbox
+                dmc.Select(
+                    id="model-select",
+                    data=["DeepSeek"], # <---------- TODO: here put models
+                    value="DeepSeek",
+                    style={"width": 200},
+                    searchable=True,
+                    #icon=DashIconify(icon="radix-icons:magnifying-glass"),
+                    rightSection=DashIconify(icon="radix-icons:chevron-down"),
+                ),
+                dashboard.chatbox.chat_history,
+                dmc.Textarea(
+                    id="input-textarea",
+                    placeholder="Enter your prompt here.",
+                    autosize=False,
+                    radius='md',
+                    minRows=2,
+                    maxRows=2,
+                ),
+                dmc.Button("Submit prompt to LLM", id="loading-button"),
+            ],
+            className="content",
+        ),
+    ])
+)
 
 # TODO: dmc not working????
 
 if __name__ == "__main__":
-    app.run_server(debug=False)
+    app.run_server(
+        debug=True,
+        host="0.0.0.0",
+        port=8050,
+    )
 

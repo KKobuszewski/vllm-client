@@ -1,7 +1,12 @@
 # docker build -t vllm-client .
-# docker build --no-cache -t vllm-client . && docker run --rm -it vllm-client /bin/bash
+# docker build --no-cache -t vllm-client . 
+# docker run --rm -it --entrypoint /bin/bash vllm-client
 # docker run -d -p 8080:8050 vllm-client
+# docker run -p$HOST_PORT:$DOCKER_PORT my_container
 
+# one can predownload this image to avoid repeated downloads from dockerhub,
+# cause at some point fees apply
+#FROM python310 
 FROM python@sha256:7a08d7bfedcbf05d15b2bff8f0c86db6dd06bcbaa74c915d2d5585dbd5ba65b0
 
 # RUN apt-get update -y \
