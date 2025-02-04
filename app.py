@@ -25,8 +25,8 @@ _dash_renderer._set_react_version("18.2.0")
 app = Dash(
     __name__,
     external_stylesheets=[dbc.themes.SANDSTONE, dbc.icons.FONT_AWESOME] + dmc.styles.ALL,
-    #use_pages=True,
-    #pages_folder="dashboard/pages",
+    use_pages=True,
+    pages_folder="pages",
     #assets_folder="dashboard/assets",
     #requests_pathname_prefix='/dashboard/'
 )
@@ -46,7 +46,6 @@ clientside_callback(
     prevent_initial_call=True,
 )
 
-
 app.layout = dmc.MantineProvider(
     html.Div([
         dashboard.bars.navbar,
@@ -58,7 +57,10 @@ app.layout = dmc.MantineProvider(
                     id="model-select",
                     data=["DeepSeek"], # <---------- TODO: here put models
                     value="DeepSeek",
-                    style={"width": 200},
+                    style={
+                        "width": 200,
+                        "margin": ["1%" "5%" "5%" "5%"],
+                        },
                     searchable=True,
                     #icon=DashIconify(icon="radix-icons:magnifying-glass"),
                     rightSection=DashIconify(icon="radix-icons:chevron-down"),
@@ -74,7 +76,7 @@ app.layout = dmc.MantineProvider(
                 ),
                 dmc.Button("Submit prompt to LLM", id="loading-button"),
             ],
-            className="content",
+            className="content"
         ),
     ])
 )
@@ -82,7 +84,7 @@ app.layout = dmc.MantineProvider(
 # TODO: dmc not working????
 
 if __name__ == "__main__":
-    app.run_server(
+    app.run(
         debug=True,
         host="0.0.0.0",
         port=8050,

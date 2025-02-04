@@ -70,6 +70,9 @@ chat_history = html.Div(
         "display": "flex",
         "height": "47vh",
         "flex-direction": "column-reverse",
+        "margin-left": "5%",
+        "margin-right": "5%",
+        "justify-content": "center"
     },
 )
 
