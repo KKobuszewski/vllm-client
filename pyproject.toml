@@ -20,6 +20,8 @@ webdriver-manager = "^4.0.2"
 selenium = "^4.28.1"
 matplotlib = "^3.10.0"
 openai = "^1.61.0"
+dash-mantine-components = "^0.15.3"
+dash-iconify = "^0.1.2"
 
 
 [build-system]

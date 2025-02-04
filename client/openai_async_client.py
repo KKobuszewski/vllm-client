@@ -14,23 +14,25 @@ client = AsyncOpenAI(
 
 async def get_models_async(client: AsyncOpenAI) -> list[str]:
     models = await client.models.list()
-    print(models)
-
     return [m.id for m in models.data]
 
 models = asyncio.run(get_models_async(client))
-print(models)
 model = models[0]
+print(f'model: {model}\n')
 
-async def main():
+async def main(prompt="Say this is a test"):
     stream = await client.chat.completions.create(
         model=model,
-        messages=[{"role": "user", "content": "Say this is a test"}],
+        messages=[{"role": "user", "content": prompt}],
         stream=True,
     )
+    print('prompt:\n"""')
+    print(prompt)
+    print('"""\n')
+    print('response:\n"""')
     async for chunk in stream:
         print(chunk.choices[0].delta.content or "", end="")
-    print()
+    print('\n"""\n')
 
 
 asyncio.run(main())
