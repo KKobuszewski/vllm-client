@@ -34,7 +34,7 @@ navbar = dbc.NavbarSimple(
     children=[
         dbc.NavItem(dbc.NavLink("About", href="/about"), ),
     ],
-    brand="vllm-chat",
+    brand="vLLM Chat",
     brand_href="#",
     color="primary",
     dark=True,

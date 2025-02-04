@@ -2,7 +2,7 @@
 
 """
 """
-
+from flask import Flask, jsonify
 import dash
 from dash import Dash
 from dash import DiskcacheManager, CeleryManager, Input, Output, callback, html, dcc, \
@@ -21,19 +21,55 @@ dotenv.load_dotenv()
 
 _dash_renderer._set_react_version("18.2.0")
 
-# create Dash server
+# create Flask & Dash server
+server = Flask(__name__)
 app = Dash(
     __name__,
+    server = server,
     external_stylesheets=[dbc.themes.SANDSTONE, dbc.icons.FONT_AWESOME] + dmc.styles.ALL,
-    use_pages=True,
-    pages_folder="pages",
+    #use_pages=True,
+    #pages_folder="pages",
     #assets_folder="dashboard/assets",
     #requests_pathname_prefix='/dashboard/'
 )
 app.title = "vllm-chat"
 #app.config.suppress_callback_exceptions = True
 
-server = app.server
+#server = app.server
+
+# ----------------- endpoints
+#view_func = lambda x : 
+#app._add_url('', view_func, methods=('GET',))
+
+@server.route("/about")
+def about_page():
+    #page = dcc.Markdown(
+        #'''
+        ## About page
+        #'''
+    #)
+    page = f'''
+        <!DOCTYPE html>
+        <html>
+            <head>
+                <meta charset="UTF-8">
+                <title>vllm-chat about</title>
+            </head>
+            <body>
+                <h1>About page</h2>
+                <div id="about-text">
+                        Simple app providing chat to comunicate with vLLM server.
+                </div>
+                <footer>
+                <p>Authors: Konrad Kobuszewski, Paulina Kobuszewska</p>
+                <p><a href="mailto:konrad.kobuszewski93@gmail.com">konrad.kobuszewski93@gmail.com</a></p>
+                </footer>
+            </body>
+        </html>
+    '''
+    return page
+
+
 
 clientside_callback(
     """
