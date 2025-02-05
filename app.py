@@ -2,18 +2,20 @@
 
 """
 """
+import argparse
+
 from flask import Flask, jsonify
 import dash
+import dash.exceptions
 from dash import Dash
-from dash import DiskcacheManager, CeleryManager, Input, Output, callback, html, dcc, \
-                 clientside_callback, _dash_renderer
+from dash import DiskcacheManager, CeleryManager, Input, Output, State, \
+                 clientside_callback, callback, html, dcc, _dash_renderer
 import dash_mantine_components as dmc
 import dash_bootstrap_components as dbc
 from dash_iconify import DashIconify
 
 import dashboard
-import dashboard.bars
-import dashboard.chatbox
+import dashboard.elements
 
 # import system variables
 import dotenv
@@ -24,9 +26,9 @@ _dash_renderer._set_react_version("18.2.0")
 # create Flask & Dash server
 server = Flask(__name__)
 app = Dash(
-    __name__,
+    'vllm-chat',#__name__,
     server = server,
-    external_stylesheets=[dbc.themes.SANDSTONE, dbc.icons.FONT_AWESOME] + dmc.styles.ALL,
+    external_stylesheets=[dbc.themes.SANDSTONE, dbc.icons. FONT_AWESOME] + dmc.styles.ALL,
     #use_pages=True,
     #pages_folder="pages",
     #assets_folder="dashboard/assets",
@@ -37,39 +39,43 @@ app.title = "vllm-chat"
 
 #server = app.server
 
-# ----------------- endpoints
+
+# ------------------------ endpoints --------------------------------
+
+# NOTE: There's probably another way do add endpoint to Dash app
 #view_func = lambda x : 
 #app._add_url('', view_func, methods=('GET',))
 
+# TODO: Model selection (dashboard.elements.model_selection) not working properly.
+# TODO: In dashboard.elements.navbar NavLink does not connect to
+#       about page while clicked.
 @server.route("/about")
 def about_page():
-    #page = dcc.Markdown(
-        #'''
-        ## About page
-        #'''
-    #)
-    page = f'''
-        <!DOCTYPE html>
-        <html>
-            <head>
-                <meta charset="UTF-8">
-                <title>vllm-chat about</title>
-            </head>
-            <body>
-                <h1>About page</h2>
-                <div id="about-text">
-                        Simple app providing chat to comunicate with vLLM server.
-                </div>
-                <footer>
-                <p>Authors: Konrad Kobuszewski, Paulina Kobuszewska</p>
-                <p><a href="mailto:konrad.kobuszewski93@gmail.com">konrad.kobuszewski93@gmail.com</a></p>
-                </footer>
-            </body>
-        </html>
-    '''
-    return page
+    return dashboard.elements.ABOUT_PAGE
 
 
+# ------------------------ app layout -------------------------------    
+
+"""
+NOTE: Objects from dash_mantine_components (dmc) fail to render
+      while not using dmc.MantineProvider.
+"""
+app.layout = dmc.MantineProvider(
+    html.Div([
+        dashboard.elements.navbar,
+        html.Div([
+                #dashboard.bars.sidebar,
+                #dash.page_container,
+                dashboard.elements.model_selection,
+                dashboard.elements.chatbox
+            ],
+            className="content"
+        ),
+    ])
+)
+
+
+# ------------------------ callbacks --------------------------------
 
 clientside_callback(
     """
@@ -82,47 +88,52 @@ clientside_callback(
     prevent_initial_call=True,
 )
 
-app.layout = dmc.MantineProvider(
-    html.Div([
-        dashboard.bars.navbar,
-        html.Div([
-                #dashboard.bars.sidebar,
-                #dash.page_container
-                #dashboard.chatbox.chatbox
-                dmc.Select(
-                    id="model-select",
-                    data=["DeepSeek"], # <---------- TODO: here put models
-                    value="DeepSeek",
-                    style={
-                        "width": 200,
-                        "margin": ["1%" "5%" "5%" "5%"],
-                        },
-                    searchable=True,
-                    #icon=DashIconify(icon="radix-icons:magnifying-glass"),
-                    rightSection=DashIconify(icon="radix-icons:chevron-down"),
-                ),
-                dashboard.chatbox.chat_history,
-                dmc.Textarea(
-                    id="input-textarea",
-                    placeholder="Enter your prompt here.",
-                    autosize=False,
-                    radius='md',
-                    minRows=2,
-                    maxRows=2,
-                ),
-                dmc.Button("Submit prompt to LLM", id="loading-button"),
-            ],
-            className="content"
-        ),
-    ])
-)
 
-# TODO: dmc not working????
+@callback(
+    Output("chat-history", "children"),
+    Output("input-textarea", "value"),
+    Output("loading-button", "loading"),
+    State("chat-history", "children"),
+    State("input-textarea", "value"),
+    Input("loading-button", "n_clicks"),
+    prevent_initial_call=True,
+)
+def add_chat_card(chat_history, input_text, n_clicks):
+    #if input_text is None or input_text == "":
+    #    raise dash.exceptions.PreventUpdate
+    
+    print(f'input to be passed to vllm: {input_text}\n')
+    
+    # here post request to vllm-server
+    #global agent
+
+    try:
+        #result = agent({"input": input_text})
+        result = {"output" : "dummy output"}
+        
+        # # create the users prompt card
+        user_card = dashboard.elements.generate_user_bubble(input_text)
+        ai_card = dashboard.elements.generate_ai_bubble(result["output"])
+
+    except:
+        user_card = generate_user_bubble(input_text)
+        ai_card = generate_ai_bubble("Unable to generate a resonse.")
+    chat_history.append(user_card)
+    chat_history.append(ai_card)
+
+    return chat_history, "", False
+
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--host", type=str, default="0.0.0.0")
+    parser.add_argument("--port", type=int, default=8050)
+    parser.add_argument("--debug", action="store_true")
+    args = parser.parse_args()
+    
     app.run(
-        debug=True,
-        host="0.0.0.0",
-        port=8050,
+        debug=args.debug,
+        host=args.host,
+        port=args.port,
     )
 
