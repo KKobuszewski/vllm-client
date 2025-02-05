@@ -139,13 +139,15 @@ sidebar = html.Div(
 
 navbar = dbc.NavbarSimple(
     children=[
-        dbc.NavItem(dbc.NavLink("About", href="/about"), ),
+        dbc.NavItem(dbc.NavLink("About", id="about", href="/about", external_link=True), ),
+        #dbc.NavItem(dcc.Link("About", href="/about"), ),
     ],
     brand="vLLM Chat",
     brand_href="#",
     color="primary",
     dark=True,
-    style={"margin": 0, "height": "7vh",}
+    style={"margin": 0, "height": "7vh",},
+    id="navbar"
 )
 
 model_selection = dmc.Select(

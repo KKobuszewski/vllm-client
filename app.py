@@ -106,7 +106,7 @@ def add_chat_card(chat_history, input_text, n_clicks):
     
     # here post request to vllm-server
     #global agent
-
+    # TODO: add DeepSeek communication
     try:
         #result = agent({"input": input_text})
         result = {"output" : "dummy output"}
@@ -116,8 +116,8 @@ def add_chat_card(chat_history, input_text, n_clicks):
         ai_card = dashboard.elements.generate_ai_bubble(result["output"])
 
     except:
-        user_card = generate_user_bubble(input_text)
-        ai_card = generate_ai_bubble("Unable to generate a resonse.")
+        user_card = dashboard.elements.generate_user_bubble(input_text)
+        ai_card = dashboard.elements.generate_ai_bubble("Unable to generate a resonse.")
     chat_history.append(user_card)
     chat_history.append(ai_card)
 
