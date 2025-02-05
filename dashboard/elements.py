@@ -64,7 +64,7 @@ def generate_user_bubble(text):
 
 def generate_ai_bubble(text):
     return dbc.Card(
-        dcc.Markdown(text),
+        dcc.Markdown(text), # <---------- TODO: Probably somewhere here is problem with too high buble
         style={
             "width": "max-content",
             "font-size": "14px",

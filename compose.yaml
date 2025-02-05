@@ -1,0 +1,44 @@
+# TODO: How to build images before running the services?
+#https://docs.docker.com/reference/compose-file/build/
+
+services:
+  vllm-server:
+    container_name: vllm-server ???
+    image: vllm-server
+    restart: always
+    command: "--runtime nvidia --gpus all --ipc=host" ???
+    volumes:
+      - ./db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/db_root_password
+    secrets:
+      - db_root_password
+      - db_password
+
+  vllm-client:
+    container_name: vllm-client
+    image: vllm-client
+    restart: always
+    ports:
+      - 8080:8050
+    links:
+      - db
+    volumes:
+      - ./nextcloud:/var/www/html
+    environment:
+      - MYSQL_PASSWORD_FILE=/run/secrets/db_password
+    depends_on:
+      vllm-service:
+        condition: service_healthy
+    secrets:
+      - db_password
+      - nextcloud_password
+
+# see https://docs.docker.com/compose/how-tos/use-secrets/
+secrets:
+  db_password:
+    file: db_password.txt
+  db_root_password:
+    file: db_root_password.txt
+  nextcloud_password:
+    file: nextcloud_password.txt
