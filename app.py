@@ -37,19 +37,19 @@ app = Dash(
 app.title = "vllm-chat"
 #app.config.suppress_callback_exceptions = True
 
-#server = app.server
-
 
 # ------------------------ endpoints --------------------------------
 
 # NOTE: There's probably another way do add endpoint to Dash app
-#view_func = lambda x : 
-#app._add_url('', view_func, methods=('GET',))
+#app._add_url("/about", about_page, methods=('GET',))
 
 # TODO: Model selection (dashboard.elements.model_selection) not working properly.
 # TODO: In dashboard.elements.navbar NavLink does not connect to
 #       about page while clicked.
-@server.route("/about")
+# https://github.com/plotly/dash/issues/214
+# https://community.plotly.com/t/how-to-add-restful-api-endpoints-to-a-dash-app/27162/5
+# https://community.plotly.com/t/apis-on-dash-server/30966/5
+@app.server.route("/about")
 def about_page():
     return dashboard.elements.ABOUT_PAGE
 

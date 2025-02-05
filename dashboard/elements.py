@@ -140,7 +140,7 @@ sidebar = html.Div(
 navbar = dbc.NavbarSimple(
     children=[
         dbc.NavItem(dbc.NavLink("About", id="about", href="/about", external_link=True), ),
-        #dbc.NavItem(dcc.Link("About", href="/about"), ),
+        #dbc.NavItem(dbc.NavLink("About", id="about", href="/about"), ), # NOTE: still not working
     ],
     brand="vLLM Chat",
     brand_href="#",
