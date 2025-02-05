@@ -28,8 +28,10 @@ RUN python3 -m venv $POETRY_LOCATION \
     && $POETRY_LOCATION/bin/poetry install --only=main \
     && rm -rf .poetry_cache
 
-RUN mkdir ./dashboard
-COPY ./dashboard/*.py ./dashboard
+RUN mkdir -p ./dashboard
+WORKDIR /app/dashboard
+COPY ./dashboard/*.py .
+WORKDIR /app
 
 ENV PATH="/app/.venv/bin:$PATH"
 ENV PYTHONPATH="/app"

@@ -2,7 +2,7 @@
 *
 
 # 2. allow for
-!dashplotly
+!dashboard
 !poetry.lock
 !poetry.toml
 !pyproject.toml
