@@ -3,6 +3,7 @@
 """
 """
 import argparse
+import asyncio
 
 from flask import Flask, jsonify
 import dash
@@ -14,6 +15,8 @@ import dash_mantine_components as dmc
 import dash_bootstrap_components as dbc
 from dash_iconify import DashIconify
 
+import client
+import client.vllm_connector
 import dashboard
 import dashboard.elements
 
@@ -24,10 +27,10 @@ dotenv.load_dotenv()
 _dash_renderer._set_react_version("18.2.0")
 
 # create Flask & Dash server
-server = Flask(__name__)
+#server = Flask(__name__) # can be passed to Dash(__name__, server=server)
 app = Dash(
-    'vllm-chat',#__name__,
-    server = server,
+    'vllm-chat',
+    #server = server,
     external_stylesheets=[dbc.themes.SANDSTONE, dbc.icons. FONT_AWESOME] + dmc.styles.ALL,
     #use_pages=True,
     #pages_folder="pages",
@@ -36,6 +39,11 @@ app = Dash(
 )
 app.title = "vllm-chat"
 #app.config.suppress_callback_exceptions = True
+
+
+# ------------------------ vllm-server --------------------------------
+
+vllm_connector = None # global 'handle' to vllmConnector
 
 
 # ------------------------ endpoints --------------------------------
@@ -102,22 +110,22 @@ def add_chat_card(chat_history, input_text, n_clicks):
     #if input_text is None or input_text == "":
     #    raise dash.exceptions.PreventUpdate
     
-    print(f'input to be passed to vllm: {input_text}\n')
+    # check input text
+    print(f'# Input to be passed to vllm-server: {input_text}')
+    if input_text is None or input_text == "":
+        print(f'# Invalid input text: {input_text}.')
+        response_text = "Unable to generate a resonse."
+    else:
+        # post request to vllm-server
+        reposnse = vllm_connector.ask(input_text)
+        response_text = ''.join(str(chunk) for chunk in reposnse)
+        print(f'# Output recived from vllm-server: {reposnse}\n')
     
-    # here post request to vllm-server
-    #global agent
-    # TODO: add DeepSeek communication
-    try:
-        #result = agent({"input": input_text})
-        result = {"output" : "dummy output"}
-        
-        # # create the users prompt card
-        user_card = dashboard.elements.generate_user_bubble(input_text)
-        ai_card = dashboard.elements.generate_ai_bubble(result["output"])
-
-    except:
-        user_card = dashboard.elements.generate_user_bubble(input_text)
-        ai_card = dashboard.elements.generate_ai_bubble("Unable to generate a resonse.")
+    # create new bubbles
+    user_card = dashboard.elements.generate_user_bubble(input_text)
+    ai_card = dashboard.elements.generate_ai_bubble(response_text)
+    
+    # update chat
     chat_history.append(user_card)
     chat_history.append(ai_card)
 
@@ -129,7 +137,21 @@ if __name__ == "__main__":
     parser.add_argument("--host", type=str, default="0.0.0.0")
     parser.add_argument("--port", type=int, default=8050)
     parser.add_argument("--debug", action="store_true")
+    parser.add_argument("--vllm_host", type=str, default="http://10.0.1.3:8000/v1")
     args = parser.parse_args()
+    
+    vllm_api_url = args.vllm_host
+    if "http" not in vllm_api_url:
+        vllm_api_url = "http://" + vllm_api_url
+    
+    print(f'# Connecting to vLLM server at {vllm_api_url}')
+    if vllm_connector is None:
+        vllm_connector = client.vllm_connector.vllmConnector(
+            vllm_api_url, 
+            api_key="EMPTY"
+        )
+    print(f'# Using model: {vllm_connector.model}')
+    print()
     
     app.run(
         debug=args.debug,

@@ -18,7 +18,8 @@ async def get_models_async(client: AsyncOpenAI) -> list[str]:
 
 models = asyncio.run(get_models_async(client))
 model = models[0]
-print(f'model: {model}\n')
+if __name__ == '__main__':
+    print(f'model: {model}\n')
 
 async def main(prompt="Say this is a test"):
     stream = await client.chat.completions.create(
@@ -35,4 +36,6 @@ async def main(prompt="Say this is a test"):
     print('\n"""\n')
 
 
-asyncio.run(main())
+
+if __name__ == '__main__':
+    asyncio.run(main())
