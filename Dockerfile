@@ -36,7 +36,7 @@ COPY ./dashboard/*.py .
 WORKDIR /app
 RUN mkdir -p client
 WORKDIR /app/client
-COPY ./client/vllm_connector.py .
+COPY ./client/*.py .
 WORKDIR /app
 
 
