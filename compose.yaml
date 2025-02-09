@@ -7,7 +7,16 @@ services:
     container_name: vllm-deepseek-server
     image: vllm-deepseek-server:latest
     #restart: always
-    command: "--runtime nvidia --gpus all --ipc=host"
+    #command: "--runtime nvidia --gpus all --ipc=host"
+    deploy:                                                         # see https://docs.docker.com/compose/how-tos/gpu-support/
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              #device_ids: ['0', '3']
+              capabilities: [gpu]
+    ipc: host
     ports:
       - 8000:8000
     volumes:
