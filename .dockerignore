@@ -7,12 +7,13 @@
 !poetry.lock
 !poetry.toml
 !pyproject.toml
-!*.py
+!app.py
 
 # 3. ignore everything in allowed files/folders
 venv/
 .venv/
 .poetry_cache/
+dashboard/assets
 data/
 .git/
 .idea

@@ -38,6 +38,11 @@ services:
     #restart: always
     ports:
       - 8080:8050
+    develop:
+      watch:
+        - action: sync
+          path: .
+          target: /code
     depends_on:
       vllm-server:
         condition: service_healthy

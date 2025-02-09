@@ -31,15 +31,15 @@ RUN python3 -m venv $POETRY_LOCATION \
     && rm -rf .poetry_cache
 
 # NOTE: To eneble copying directories below add them in .dockerignore
-#COPY . .
-RUN mkdir -p ./dashboard
-WORKDIR /app/dashboard
-COPY ./dashboard/*.py ./
-WORKDIR /app
-RUN mkdir -p ./client
-WORKDIR /app/client
-COPY ./client/*.py ./
-WORKDIR /app
+COPY . .
+# RUN mkdir -p ./dashboard
+# WORKDIR /app/dashboard
+# COPY ./dashboard/*.py ./
+# WORKDIR /app
+# RUN mkdir -p ./client
+# WORKDIR /app/client
+# COPY ./client/*.py ./
+# WORKDIR /app
 
 
 # RUN app.py

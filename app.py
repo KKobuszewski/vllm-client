@@ -134,6 +134,13 @@ if __name__ == "__main__":
     """
     run locally with:
     poetry run python app.py --vllm_host "http://10.0.1.3:8000/"
+    
+    NOTE:
+    While running in microservice mode with docker compose we need to set
+    vllm host to name of the service running vllm-server
+    or
+    use network_mode: "host" in compose.yaml
+    see: https://stackoverflow.com/questions/56582446/how-to-use-host-network-for-docker-compose
     """
     parser = argparse.ArgumentParser()
     parser.add_argument("--host", type=str, default="0.0.0.0")
