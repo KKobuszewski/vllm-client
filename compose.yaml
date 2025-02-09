@@ -16,6 +16,11 @@ services:
     #  - OPENAI_API_KEY=/run/secrets/vllm_api_key
     #secrets:
     #  - vllm_api_key
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
 
   vllm-client:
     build: .
@@ -25,7 +30,7 @@ services:
     ports:
       - 8080:8050
     depends_on:
-      vllm-service:
+      vllm-server:
         condition: service_healthy
 
 # see https://docs.docker.com/compose/how-tos/use-secrets/
