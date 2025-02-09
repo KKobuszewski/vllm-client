@@ -18,6 +18,8 @@ FROM python@sha256:7a08d7bfedcbf05d15b2bff8f0c86db6dd06bcbaa74c915d2d5585dbd5ba6
 #     && apt-get clean \
 #     && rm -rf /var/lib/apt/lists/*
 
+
+# INSTALL DEPENDENCIES OF app.py IN THE IMAGE
 WORKDIR /app
 COPY app.py poetry.lock poetry.toml pyproject.toml ./
 
@@ -32,7 +34,13 @@ RUN mkdir -p ./dashboard
 WORKDIR /app/dashboard
 COPY ./dashboard/*.py .
 WORKDIR /app
+RUN mkdir -p client
+WORKDIR /app/client
+COPY ./client/vllm_connector.py .
+WORKDIR /app
 
+
+# RUN app.py
 ENV PATH="/app/.venv/bin:$PATH"
 ENV PYTHONPATH="/app"
 EXPOSE 8050
