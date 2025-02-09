@@ -132,14 +132,14 @@ def add_chat_card(chat_history, input_text, n_clicks):
 
 if __name__ == "__main__":
     """
-    run with:
+    run locally with:
     poetry run python app.py --vllm_host "http://10.0.1.3:8000/"
     """
     parser = argparse.ArgumentParser()
     parser.add_argument("--host", type=str, default="0.0.0.0")
     parser.add_argument("--port", type=int, default=8050)
     parser.add_argument("--debug", action="store_true")
-    parser.add_argument("--vllm_host", type=str, default="http://localhost:8000/v1")
+    parser.add_argument("--vllm_host", type=str, default="http://vllm-server:8000/v1")
     args = parser.parse_args()
     
     vllm_api_url = args.vllm_host
