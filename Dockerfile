@@ -32,11 +32,11 @@ RUN python3 -m venv $POETRY_LOCATION \
 
 RUN mkdir -p ./dashboard
 WORKDIR /app/dashboard
-COPY ./dashboard/*.py .
+COPY ./dashboard/*.py ./
 WORKDIR /app
-RUN mkdir -p client
+RUN mkdir -p ./client
 WORKDIR /app/client
-COPY ./client/*.py .
+COPY ./client/*.py ./
 WORKDIR /app
 
 
