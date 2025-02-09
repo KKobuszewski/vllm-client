@@ -15,13 +15,18 @@ poetry run python <script>
 
 ## Sources
 
-### Writing a chat
+### Writing a chat application
 
 [Setting up a chatbot with FastAPI](https://dzone.com/articles/building-a-dynamic-chat-application-setting-up-cha)
+
+https://stocktistics.com/stocksaavy
 
 https://github.com/troyscribner/stocknews
 
 https://github.com/troyscribner/stocknews/blob/main/dashboard/pages/stocks/chatbox.py
+
+https://www.dash-mantine-components.com/getting-started
+
 
 
 ### vLLM server
@@ -30,12 +35,19 @@ https://docs.vllm.ai/en/latest/getting_started/quickstart.html
 
 [Enable reasoning with openai clients](https://docs.vllm.ai/en/latest/features/reasoning_outputs.html)
 
+https://ploomber.io/blog/vllm-deploy/
+
+
+
 ### Communication with vLLM server - OpenAI API
+
+https://platform.openai.com/docs/quickstart?language=python&example=completions
 
 https://github.com/openai/openai-python/tree/main
 
 https://stackoverflow.com/questions/76305207/openai-api-asynchronous-api-calls
 
+https://docs.vllm.ai/en/stable/getting_started/examples/api_client.html
 
 <br>
 <br>
