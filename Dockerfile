@@ -30,6 +30,8 @@ RUN python3 -m venv $POETRY_LOCATION \
     && $POETRY_LOCATION/bin/poetry install --only=main \
     && rm -rf .poetry_cache
 
+# NOTE: To eneble copying directories below add them in .dockerignore
+#COPY . .
 RUN mkdir -p ./dashboard
 WORKDIR /app/dashboard
 COPY ./dashboard/*.py ./
