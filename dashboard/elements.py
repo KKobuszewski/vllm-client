@@ -106,7 +106,7 @@ chatbox = dmc.Stack(
             minRows=2,
             maxRows=2,
         ),
-        dmc.Button("Submit prompt to LLM", id="loading-button"),
+        dmc.Button("Submit prompt to LLM", autoContrast=True, id="loading-button"),
     ],
     style={
         "height": "60vh",
@@ -150,15 +150,31 @@ navbar = dbc.NavbarSimple(
     id="navbar"
 )
 
-model_selection = dmc.Select(
-    id="model-select",
-    data=["DeepSeek"], # <---------- TODO: here put models
-    value="DeepSeek",
+#model_selection = dmc.Select(
+    #id="model-select",
+    #data=models, # <---------- TODO: here put models
+    #value=models[0],
+    #style={
+        #"width": 200,
+        #"margin": ["1%" "5%" "5%" "5%"],
+    #},
+    #searchable=True,
+    ##icon=DashIconify(icon="radix-icons:magnifying-glass"),
+    #rightSection=DashIconify(icon="radix-icons:chevron-down"),
+#)
+
+model_selection = dmc.Card(
+    children=[dmc.Text("Models: ")],
     style={
-        "width": 200,
+        "width": "60vh",
         "margin": ["1%" "5%" "5%" "5%"],
     },
-    searchable=True,
-    #icon=DashIconify(icon="radix-icons:magnifying-glass"),
-    rightSection=DashIconify(icon="radix-icons:chevron-down"),
+    withBorder=True,
+    id='live-update-text'
+)
+
+interval_update_model = dcc.Interval(
+    id='interval-model',
+    interval=1*1000, # in milliseconds
+    n_intervals=0
 )

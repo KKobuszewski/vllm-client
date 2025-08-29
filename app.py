@@ -77,7 +77,8 @@ app.layout = dmc.MantineProvider(
             ],
             className="content"
         ),
-    ])
+        dashboard.elements.interval_update_model # NOTE: triggers update of model_selection text
+    ]),
 )
 
 
@@ -129,11 +130,20 @@ def add_chat_card(chat_history, input_text, n_clicks):
 
     return chat_history, "", False
 
+@callback(
+    Output('live-update-text', 'children'),
+    Input('interval-model', 'n_intervals')
+)
+def update_model(n):
+    
+    return [dmc.Text(f"Model: {vllm_connector.model}")]
+    
+
 
 if __name__ == "__main__":
     """
     run locally with:
-    poetry run python app.py --vllm_host "http://10.0.1.3:8000/"
+    poetry run python app.py --vllm_host "http://10.0.1.3:8000/v1"
     
     NOTE:
     While running in microservice mode with docker compose we need to set
@@ -147,6 +157,7 @@ if __name__ == "__main__":
     parser.add_argument("--port", type=int, default=8050)
     parser.add_argument("--debug", action="store_true")
     parser.add_argument("--vllm_host", type=str, default="http://vllm-server:8000/v1")
+    parser.add_argument("--vllm_api_key", type=str, default="EMPTY")
     args = parser.parse_args()
     
     vllm_api_url = args.vllm_host
@@ -157,7 +168,7 @@ if __name__ == "__main__":
     if vllm_connector is None:
         vllm_connector = client.vllm_connector.vllmConnector(
             vllm_api_url, 
-            api_key="EMPTY"
+            api_key=args.vllm_api_key
         )
     print(f'# Using model: {vllm_connector.model}')
     print()

@@ -37,6 +37,7 @@ https://docs.vllm.ai/en/latest/getting_started/quickstart.html
 
 https://ploomber.io/blog/vllm-deploy/
 
+https://github.com/vllm-project/vllm?tab=readme-ov-file
 
 
 ### Communication with vLLM server - OpenAI API
